@@ -4,7 +4,7 @@
     "annotations": [
       {
         "name": "PBIDesktopVersion",
-        "value": "2.119.870.0 (23.07)"
+        "value": "2.139.7490.1 (Main)+ced83814b7c315e22d41d8327b694641706f1259"
       },
       {
         "name": "__PBI_TimeIntelligenceEnabled",
@@ -13,6 +13,10 @@
       {
         "name": "PBI_QueryOrder",
         "value": "[\"Customers\",\"Categories\",\"Orders\",\"Order_Details\",\"Products\"]"
+      },
+      {
+        "name": "PBI_ProTooling",
+        "value": "[\"WebModelingEdit\"]"
       }
     ],
     "culture": "en-US",
@@ -21,7 +25,6 @@
         "name": "en-US",
         "linguisticMetadata": {
           "content": {
-            "DynamicImprovement": "HighConfidence",
             "Entities": {
               "order_details.revenue": {
                 "Definition": {
@@ -1593,13 +1596,10 @@
               {
                 "name": "SummarizationSetBy",
                 "value": "Automatic"
-              },
-              {
-                "name": "PBI_FormatHint",
-                "value": "{\"isGeneralNumber\":true}"
               }
             ],
             "dataType": "double",
+            "formatString": "0.00%;-0.00%;0.00%",
             "lineageTag": "e6ca9cf4-89aa-429f-9cad-416961fb4e43",
             "sourceColumn": "Discount",
             "summarizeBy": "sum"
