@@ -102,23 +102,12 @@ DeltaTable.createIfNotExists(spark) \
     .addColumn("EmailPromotion", IntegerType()) \
     .addColumn("Suffix", StringType()) \
     .addColumn("AdditionalContactInfo", StringType()) \
+    .addColumn("Demographics", StringType()) \
     .addColumn("TerritoryName", StringType()) \
     .addColumn("TerritoryID", IntegerType()) \
     .addColumn("CountryRegionCode", StringType()) \
     .addColumn("Group", StringType()) \
     .execute()
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-df = spark.sql("SELECT * FROM Sales_LH_Bronze.sales_bronze LIMIT 1000")
-display(df)
 
 # METADATA ********************
 
