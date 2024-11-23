@@ -34,7 +34,7 @@ from delta.tables import *
 
 # CELL ********************
 
-dfBronze = spark.read.format("parquet").load("Files/sales/AdventureWorksSales.parquet")
+df = spark.read.format("parquet").load("Files/sales/AdventureWorksSales.parquet")
 
 # METADATA ********************
 
@@ -88,11 +88,6 @@ DeltaTable.createIfNotExists(spark) \
     .addColumn("ToCurrencyCode", StringType()) \
     .addColumn("AverageRate", DecimalType(19, 4)) \
     .addColumn("EndOfDayRate", DecimalType(19, 4)) \
-    .addColumn("CreditCardID", IntegerType()) \
-    .addColumn("CardType", StringType()) \
-    .addColumn("CardNumber", StringType()) \
-    .addColumn("ExpMonth", IntegerType()) \
-    .addColumn("ExpYear", IntegerType()) \
     .addColumn("CustomerID", IntegerType()) \
     .addColumn("PersonID", IntegerType()) \
     .addColumn("AccountNumber", StringType()) \
@@ -122,11 +117,23 @@ DeltaTable.createIfNotExists(spark) \
 
 # CELL ********************
 
+df = spark.sql("SELECT * FROM Sales_LH_Bronze.sales_bronze LIMIT 1000")
+display(df)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 deltaTable = DeltaTable.forPath(spark, "Tables/sales_bronze")
 
 deltaTable.alias("bronze") \
     .merge(
-        dfBronze.alias("updates"),
+        df.alias("updates"),
         "bronze.SalesOrderID = updates.SalesOrderID AND bronze.SalesOrderDetailID = updates.SalesOrderDetailID"
     ) \
     .whenNotMatchedInsertAll() \

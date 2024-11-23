@@ -21,6 +21,19 @@
 
 # CELL ********************
 
+from pyspark.sql.functions import *
+from pyspark.sql.types import *
+from delta.tables import *
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
 
 # METADATA ********************
 
