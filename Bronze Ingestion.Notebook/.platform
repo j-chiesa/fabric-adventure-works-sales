@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
     "type": "Notebook",
-    "displayName": "Sales_Bronze_To_Silver",
+    "displayName": "Bronze Ingestion",
     "description": "New notebook"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "3b0bafee-0d00-4e87-95cb-3d8ffc6b3f76"
+    "logicalId": "122b2c49-492e-4459-a92c-d02fac301cbd"
   }
 }

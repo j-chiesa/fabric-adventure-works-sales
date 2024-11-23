@@ -6,7 +6,7 @@
         "typeProperties": {
           "isSequential": false,
           "items": {
-            "value": "@activity('Get Metadata').output.childItems",
+            "value": "@activity('Filter').output.Value",
             "type": "Expression"
           },
           "activities": [
@@ -56,7 +56,7 @@
                     },
                     "schema": [],
                     "linkedService": {
-                      "name": "Sales_Bronze",
+                      "name": "Sales_LH_Bronze",
                       "properties": {
                         "type": "Lakehouse",
                         "typeProperties": {
@@ -95,7 +95,7 @@
         "name": "ForEach",
         "dependsOn": [
           {
-            "activity": "Get Metadata",
+            "activity": "Filter",
             "dependencyConditions": [
               "Succeeded"
             ]
@@ -125,6 +125,7 @@
           ],
           "storeSettings": {
             "type": "AzureBlobFSReadSettings",
+            "recursive": true,
             "enablePartitionDiscovery": false
           },
           "formatSettings": {
@@ -140,7 +141,42 @@
         },
         "name": "Get Metadata",
         "dependsOn": []
+      },
+      {
+        "type": "Filter",
+        "typeProperties": {
+          "items": {
+            "value": "@activity('Get Metadata').output.childItems",
+            "type": "Expression"
+          },
+          "condition": {
+            "value": "@contains(pipeline().parameters.allowedTables, item().name)",
+            "type": "Expression"
+          }
+        },
+        "name": "Filter",
+        "dependsOn": [
+          {
+            "activity": "Get Metadata",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
       }
-    ]
+    ],
+    "parameters": {
+      "allowedTables": {
+        "type": "array",
+        "defaultValue": [
+          "SalesOrderHeader",
+          "SalesOrderDetail",
+          "Customer",
+          "SpecialOfferProduct",
+          "SalesTerritory",
+          "Product"
+        ]
+      }
+    }
   }
 }
