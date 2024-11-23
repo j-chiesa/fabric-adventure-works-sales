@@ -17,7 +17,7 @@
 
 # MARKDOWN ********************
 
-# # Bronze Ingestion
+# # Sales Bronze Ingestion
 
 # CELL ********************
 
@@ -124,7 +124,7 @@ DeltaTable.createIfNotExists(spark) \
 
 deltaTable = DeltaTable.forPath(spark, "Tables/sales_bronze")
 
-deltaTable.alias("bronze")\
+deltaTable.alias("bronze") \
     .merge(
         dfBronze.alias("updates"),
         "bronze.SalesOrderID = updates.SalesOrderID AND bronze.SalesOrderDetailID = updates.SalesOrderDetailID"

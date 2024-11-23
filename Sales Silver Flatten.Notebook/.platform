@@ -1,11 +1,12 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
-    "type": "Lakehouse",
-    "displayName": "Sales_LH_Gold"
+    "type": "Notebook",
+    "displayName": "Sales Silver Flatten",
+    "description": "New notebook"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "97cf1a27-0cac-4aa1-9f92-be0673f402cd"
+    "logicalId": "691cd6b9-37df-4e80-949c-23edcbd05946"
   }
 }
