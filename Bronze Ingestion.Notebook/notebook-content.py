@@ -21,6 +21,7 @@
 
 # CELL ********************
 
+from pyspark.sql.utils import AnalysisException
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
 from delta.tables import *
@@ -45,69 +46,11 @@ df = spark.read.format("parquet").load("Files/sales/AdventureWorksSales.parquet"
 
 # CELL ********************
 
-DeltaTable.createIfNotExists(spark) \
-    .tableName("Sales_LH_Bronze.sales_bronze") \
-    .addColumn("SalesOrderID", IntegerType()) \
-    .addColumn("RevisionNumber", IntegerType()) \
-    .addColumn("OrderDate", TimestampType()) \
-    .addColumn("DueDate", TimestampType()) \
-    .addColumn("ShipDate", TimestampType()) \
-    .addColumn("Status", IntegerType()) \
-    .addColumn("OnlineOrderFlag", BooleanType()) \
-    .addColumn("SalesOrderNumber", StringType()) \
-    .addColumn("PurchaseOrderNumber", StringType()) \
-    .addColumn("CreditCardApprovalCode", StringType()) \
-    .addColumn("SubTotal", DecimalType(19, 4)) \
-    .addColumn("TaxAmt", DecimalType(19, 4)) \
-    .addColumn("Freight", DecimalType(19, 4)) \
-    .addColumn("TotalDue", DecimalType(19, 4)) \
-    .addColumn("Comment", StringType()) \
-    .addColumn("SalesOrderDetailID", IntegerType()) \
-    .addColumn("CarrierTrackingNumber", StringType()) \
-    .addColumn("OrderQty", IntegerType()) \
-    .addColumn("UnitPrice", DecimalType(19, 4)) \
-    .addColumn("UnitPriceDiscount", DecimalType(19, 4)) \
-    .addColumn("LineTotal", DecimalType(38, 6)) \
-    .addColumn("ProductID", IntegerType()) \
-    .addColumn("ProductName", StringType()) \
-    .addColumn("ProductNumber", StringType()) \
-    .addColumn("MakeFlag", BooleanType()) \
-    .addColumn("FinishedGoodsFlag", BooleanType()) \
-    .addColumn("Color", StringType()) \
-    .addColumn("Size", StringType()) \
-    .addColumn("Weight", DecimalType(8, 2)) \
-    .addColumn("SizeUnitMeasureCode", StringType()) \
-    .addColumn("WeightUnitMeasureCode", StringType()) \
-    .addColumn("SellStartDate", TimestampType()) \
-    .addColumn("SellEndDate", TimestampType()) \
-    .addColumn("DiscontinuedDate", TimestampType()) \
-    .addColumn("ListPrice", DecimalType(19, 4)) \
-    .addColumn("CurrencyRateID", IntegerType()) \
-    .addColumn("CurrencyRateDate", TimestampType()) \
-    .addColumn("FromCurrencyCode", StringType()) \
-    .addColumn("ToCurrencyCode", StringType()) \
-    .addColumn("AverageRate", DecimalType(19, 4)) \
-    .addColumn("EndOfDayRate", DecimalType(19, 4)) \
-    .addColumn("CustomerID", IntegerType()) \
-    .addColumn("PersonID", IntegerType()) \
-    .addColumn("AccountNumber", StringType()) \
-    .addColumn("BusinessEntityID", IntegerType()) \
-    .addColumn("Name", StringType()) \
-    .addColumn("PersonType", StringType()) \
-    .addColumn("Title", StringType()) \
-    .addColumn("NameStyle", BooleanType()) \
-    .addColumn("FirstName", StringType()) \
-    .addColumn("MiddleName", StringType()) \
-    .addColumn("LastName", StringType()) \
-    .addColumn("EmailPromotion", IntegerType()) \
-    .addColumn("Suffix", StringType()) \
-    .addColumn("AdditionalContactInfo", StringType()) \
-    .addColumn("Demographics", StringType()) \
-    .addColumn("TerritoryName", StringType()) \
-    .addColumn("TerritoryID", IntegerType()) \
-    .addColumn("CountryRegionCode", StringType()) \
-    .addColumn("Group", StringType()) \
-    .execute()
+try:
+    deltaTable = DeltaTable.forName(spark, "Sales_LH_Bronze.Sales_Bronze")
+except AnalysisException:
+    df.write.format("delta").mode("overwrite").saveAsTable("Sales_LH_Bronze.Sales_Bronze")
+    deltaTable = DeltaTable.forName(spark, "Sales_LH_Bronze.Sales_Bronze")
 
 # METADATA ********************
 
@@ -118,13 +61,12 @@ DeltaTable.createIfNotExists(spark) \
 
 # CELL ********************
 
-deltaTable = DeltaTable.forPath(spark, "Tables/sales_bronze")
-
 deltaTable.alias("bronze") \
     .merge(
         df.alias("updates"),
         "bronze.SalesOrderID = updates.SalesOrderID AND bronze.SalesOrderDetailID = updates.SalesOrderDetailID"
     ) \
+    .whenMatchedUpdateAll() \
     .whenNotMatchedInsertAll() \
     .execute()
 

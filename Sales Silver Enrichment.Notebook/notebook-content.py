@@ -71,7 +71,9 @@ dfSilver = dfSilver.fillna({
     "Weight": 0,
     "SizeUnitMeasureCode": "N/A",
     "WeightUnitMeasureCode": "N/A",
-    "MiddleName": ""
+    "MiddleName": "",
+    "TelephoneNumber": "N/A",
+    "MobileNumber": "N/A"
 })
 
 # METADATA ********************
@@ -224,8 +226,8 @@ dfSilver_B2C = dfSilver.filter(col("PersonType") == 2)
 # CELL ********************
 
 dfSilver = dfSilver \
-    .withColumn("DateFirstPurchase", to_date(to_timestamp(col("DateFirstPurchase"), "yyyy-MM-ddX"))) \
-    .withColumn("BirthDate", to_date(to_timestamp(col("BirthDate"), "yyyy-MM-ddX")))
+    .withColumn("DateFirstPurchase", to_date(to_timestamp(col("DateFirstPurchase"), "yyyy-MM-dd"))) \
+    .withColumn("BirthDate", to_date(to_timestamp(col("BirthDate"), "yyyy-MM-dd")))
 
 # METADATA ********************
 
@@ -241,7 +243,7 @@ columns_to_drop = [
     "PurchaseOrderNumber", 
     "CarrierTrackingNumber", 
     "BusinessEntityID", 
-    "Name", #Lo cambiare a StoreName
+    "StoreName", 
     "Title", 
     "NameStyle"
 ] 
@@ -257,7 +259,7 @@ dfSilver_B2C = dfSilver_B2C.drop(*columns_to_drop)
 
 # CELL ********************
 
-dfSilver.write.format("delta").mode("overwrite").save("Tables/Sales_Silver_B2C")
+dfSilver_B2C.write.format("delta").mode("overwrite").save("Tables/Sales_Silver_B2C")
 
 # METADATA ********************
 
@@ -269,3 +271,54 @@ dfSilver.write.format("delta").mode("overwrite").save("Tables/Sales_Silver_B2C")
 # MARKDOWN ********************
 
 # ## Sales Silver B2B
+
+# CELL ********************
+
+dfSilver_B2B = dfSilver.filter(col("PersonType") != 2)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+columns_to_drop = [
+    "OnlineOrderFlag", 
+    "BusinessEntityID", 
+    "NameStyle",
+    "DateFirstPurchase",
+    "BirthDate",
+    "MaritalStatus",
+    "YearlyIncome",
+    "Gender",
+    "TotalChildren",
+    "NumberChildrenAtHome",
+    "Education",
+    "Occupation",
+    "HomeOwnerFlag",
+    "NumberCarsOwned",
+    "CommuteDistance"
+] 
+
+dfSilver_B2C = dfSilver_B2C.drop(*columns_to_drop)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+dfSilver_B2B.write.format("delta").mode("overwrite").save("Tables/Sales_Silver_B2B")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }

@@ -130,7 +130,7 @@ dfSilver = dfSilver \
 
 # CELL ********************
 
-dfSilver.write.format("delta").mode("overwrite").save("Tables/Sales_Silver")
+dfSilver.write.format("delta").mode("overwrite").option("overwriteSchema", "true").save("Tables/Sales_Silver")
 
 # METADATA ********************
 
