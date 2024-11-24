@@ -64,33 +64,14 @@ dfSilver = dfBronze.dropDuplicates(["SalesOrderID", "SalesOrderDetailID"])
 
 # CELL ********************
 
+from pyspark.sql.functions import xpath, lit
+
+# Extraer el número de teléfono utilizando xpath
 dfSilver = dfSilver \
     .withColumn("TelephoneNumber", xpath(col("AdditionalContactInfo"), lit("//*[local-name()='telephoneNumber']/*[local-name()='number']/text()")).getItem(0)) \
     .withColumn("MobileNumber", xpath(col("AdditionalContactInfo"), lit("//*[local-name()='mobile']/*[local-name()='number']/text()")).getItem(0))
 
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-dfSilver = dfSilver \
-    .withColumn("TotalPurchaseYTD", xpath(col("Demographics"), lit("//*[local-name()='TotalPurchaseYTD']/text()")).getItem(0).cast(IntegerType())) \
-    .withColumn("DateFirstPurchase", xpath(col("Demographics"), lit("//*[local-name()='DateFirstPurchase']/text()")).getItem(0)) \
-    .withColumn("BirthDate", xpath(col("Demographics"), lit("//*[local-name()='BirthDate']/text()")).getItem(0)) \
-    .withColumn("MaritalStatus", xpath(col("Demographics"), lit("//*[local-name()='MaritalStatus']/text()")).getItem(0)) \
-    .withColumn("YearlyIncome", xpath(col("Demographics"), lit("//*[local-name()='YearlyIncome']/text()")).getItem(0)) \
-    .withColumn("Gender", xpath(col("Demographics"), lit("//*[local-name()='Gender']/text()")).getItem(0)) \
-    .withColumn("TotalChildren", xpath(col("Demographics"), lit("//*[local-name()='TotalChildren']/text()")).getItem(0).cast(IntegerType())) \
-    .withColumn("NumberChildrenAtHome", xpath(col("Demographics"), lit("//*[local-name()='NumberChildrenAtHome']/text()")).getItem(0).cast(IntegerType())) \
-    .withColumn("Education", xpath(col("Demographics"), lit("//*[local-name()='Education']/text()")).getItem(0)) \
-    .withColumn("Occupation", xpath(col("Demographics"), lit("//*[local-name()='Occupation']/text()")).getItem(0)) \
-    .withColumn("HomeOwnerFlag", xpath(col("Demographics"), lit("//*[local-name()='HomeOwnerFlag']/text()")).getItem(0).cast(IntegerType())) \
-    .withColumn("NumberCarsOwned", xpath(col("Demographics"), lit("//*[local-name()='NumberCarsOwned']/text()")).getItem(0).cast(IntegerType())) \
-    .withColumn("CommuteDistance", xpath(col("Demographics"), lit("//*[local-name()='CommuteDistance']/text()")).getItem(0))
+display(dfSilver)
 
 
 # METADATA ********************
@@ -102,35 +83,8 @@ dfSilver = dfSilver \
 
 # CELL ********************
 
-dfSilver = dfSilver \
-    .withColumn("SalesOrderNumber", regexp_replace("SalesOrderNumber", "^SO", "")) \
-    .withColumn("PurchaseOrderNumber", regexp_replace("PurchaseOrderNumber", "^PO", ""))
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-dfSilver = dfSilver \
-    .withColumn("OrderDate", to_date("OrderDate")) \
-    .withColumn("DueDate", to_date("DueDate")) \
-    .withColumn("ShipDate", to_date("ShipDate")) \
-    .withColumn("CurrencyRateDate", to_date("CurrencyRateDate"))
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-dfSilver.write.format("delta").mode("overwrite").option("overwriteSchema", "true").save("Tables/Sales_Silver")
+dfSilverFiltered = dfSilver.filter(col("AdditionalContactInfo").isNotNull())
+display(dfSilverFiltered)
 
 # METADATA ********************
 
