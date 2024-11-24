@@ -243,6 +243,7 @@ columns_to_drop = [
     "PurchaseOrderNumber", 
     "CarrierTrackingNumber", 
     "BusinessEntityID", 
+    "EndOfDayRate"
     "StoreName", 
     "Title", 
     "NameStyle"
