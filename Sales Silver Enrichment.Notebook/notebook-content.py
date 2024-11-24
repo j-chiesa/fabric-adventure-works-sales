@@ -182,7 +182,11 @@ dfSilver = dfSilver \
 # CELL ********************
 
 columns_to_drop = [
+    "DueDate",
+    "ShipDate",
     "RevisionNumber", 
+    "SalesOrderNumber",
+    "CreditCardApprovalCode",
     "Comment", 
     "MakeFlag",
     "FinishedGoodsFlag",
@@ -195,6 +199,7 @@ columns_to_drop = [
     "ToCurrencyCode", 
     "AverageRate", 
     "EndOfDateRate", 
+    "PersonID",
     "AdditionalContactInfo", 
     "Demographics"
 ] 
@@ -225,9 +230,9 @@ dfSilver_B2C = dfSilver.filter(col("PersonType") == 2)
 
 # CELL ********************
 
-dfSilver = dfSilver \
-    .withColumn("DateFirstPurchase", to_date(to_timestamp(col("DateFirstPurchase"), "yyyy-MM-dd"))) \
-    .withColumn("BirthDate", to_date(to_timestamp(col("BirthDate"), "yyyy-MM-dd")))
+dfSilver_B2C = dfSilver_B2C \
+    .withColumn("DateFirstPurchase", to_date(regexp_replace(col("DateFirstPurchase"), "Z$", ""))) \
+    .withColumn("BirthDate", to_date(regexp_replace(col("BirthDate"), "Z$", "")))
 
 # METADATA ********************
 
@@ -243,6 +248,7 @@ columns_to_drop = [
     "PurchaseOrderNumber", 
     "CarrierTrackingNumber", 
     "BusinessEntityID", 
+    "Suffix",
     "EndOfDayRate"
     "StoreName", 
     "Title", 
