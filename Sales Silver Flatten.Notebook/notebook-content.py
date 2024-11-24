@@ -64,8 +64,6 @@ dfSilver = dfBronze.dropDuplicates(["SalesOrderID", "SalesOrderDetailID"])
 
 # CELL ********************
 
-from pyspark.sql.functions import xpath, lit
-
 dfSilver = dfSilver \
     .withColumn("TelephoneNumber", xpath(col("AdditionalContactInfo"), lit("//*[local-name()='telephoneNumber']/*[local-name()='number']/text()")).getItem(0)) \
     .withColumn("MobileNumber", xpath(col("AdditionalContactInfo"), lit("//*[local-name()='mobile']/*[local-name()='number']/text()")).getItem(0))
@@ -132,7 +130,7 @@ dfSilver = dfSilver \
 
 # CELL ********************
 
-dfSilver.write.format("delta").mode("overwrite").save("Tables/sales_silver")
+dfSilver.write.format("delta").mode("overwrite").save("Tables/Sales_Silver")
 
 # METADATA ********************
 
