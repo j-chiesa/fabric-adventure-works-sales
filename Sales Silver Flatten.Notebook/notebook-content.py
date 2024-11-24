@@ -129,3 +129,14 @@ dfSilver = dfSilver \
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark"
 # META }
+
+# CELL ********************
+
+dfSilver.write.format("delta").mode("overwrite").save("Tables/sales_silver")
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
