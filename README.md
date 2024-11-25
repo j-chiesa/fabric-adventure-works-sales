@@ -1,4 +1,4 @@
-# Microsoft Fabric Project: Adventure Works Sales
+# Adventure Works: Sales Data Mart
 
 ## Overview
 
