@@ -2,135 +2,10 @@
   "properties": {
     "activities": [
       {
-        "type": "ForEach",
+        "type": "TridentNotebook",
         "typeProperties": {
-          "isSequential": false,
-          "items": {
-            "value": "@activity('Filter').output.Value",
-            "type": "Expression"
-          },
-          "activities": [
-            {
-              "type": "Copy",
-              "typeProperties": {
-                "source": {
-                  "type": "ParquetSource",
-                  "storeSettings": {
-                    "type": "AzureBlobFSReadSettings",
-                    "recursive": true,
-                    "enablePartitionDiscovery": false
-                  },
-                  "formatSettings": {
-                    "type": "ParquetReadSettings"
-                  },
-                  "datasetSettings": {
-                    "type": "Parquet",
-                    "typeProperties": {
-                      "location": {
-                        "type": "AzureBlobFSLocation",
-                        "fileSystem": "sales",
-                        "folderPath": {
-                          "value": "@item().name",
-                          "type": "Expression"
-                        }
-                      },
-                      "compressionCodec": "snappy"
-                    },
-                    "schema": [],
-                    "externalReferences": {
-                      "connection": "6ad907f9-de62-4f22-bd10-543e93f7f605"
-                    },
-                    "annotations": []
-                  }
-                },
-                "sink": {
-                  "type": "LakehouseTableSink",
-                  "tableActionOption": "Append",
-                  "datasetSettings": {
-                    "type": "LakehouseTable",
-                    "typeProperties": {
-                      "table": {
-                        "value": "@item().name",
-                        "type": "Expression"
-                      }
-                    },
-                    "schema": [],
-                    "linkedService": {
-                      "name": "Sales_LH_Bronze",
-                      "properties": {
-                        "type": "Lakehouse",
-                        "typeProperties": {
-                          "artifactId": "d303ef7b-6d6d-4c21-8d78-530745a9d9cc",
-                          "workspaceId": "00000000-0000-0000-0000-000000000000",
-                          "rootFolder": "Tables"
-                        },
-                        "annotations": []
-                      }
-                    },
-                    "annotations": []
-                  }
-                },
-                "translator": {
-                  "type": "TabularTranslator",
-                  "typeConversion": true,
-                  "typeConversionSettings": {
-                    "allowDataTruncation": true,
-                    "treatBooleanAsNumber": false
-                  }
-                },
-                "enableStaging": false
-              },
-              "policy": {
-                "timeout": "0.12:00:00",
-                "retry": 0,
-                "retryIntervalInSeconds": 30,
-                "secureInput": false,
-                "secureOutput": false
-              },
-              "name": "Copy data",
-              "dependsOn": []
-            }
-          ]
-        },
-        "name": "ForEach",
-        "dependsOn": [
-          {
-            "activity": "Filter",
-            "dependencyConditions": [
-              "Succeeded"
-            ]
-          }
-        ]
-      },
-      {
-        "type": "GetMetadata",
-        "typeProperties": {
-          "datasetSettings": {
-            "type": "Parquet",
-            "typeProperties": {
-              "location": {
-                "type": "AzureBlobFSLocation",
-                "fileSystem": "sales"
-              },
-              "compressionCodec": "snappy"
-            },
-            "schema": [],
-            "externalReferences": {
-              "connection": "6ad907f9-de62-4f22-bd10-543e93f7f605"
-            },
-            "annotations": []
-          },
-          "fieldList": [
-            "childItems"
-          ],
-          "storeSettings": {
-            "type": "AzureBlobFSReadSettings",
-            "recursive": true,
-            "enablePartitionDiscovery": false
-          },
-          "formatSettings": {
-            "type": "ParquetReadSettings"
-          }
+          "notebookId": "122b2c49-492e-4459-a92c-d02fac301cbd",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
         },
         "policy": {
           "timeout": "0.12:00:00",
@@ -139,44 +14,78 @@
           "secureInput": false,
           "secureOutput": false
         },
-        "name": "Get Metadata",
+        "name": "Sales Bronze Ingestion",
         "dependsOn": []
       },
       {
-        "type": "Filter",
+        "type": "TridentNotebook",
         "typeProperties": {
-          "items": {
-            "value": "@activity('Get Metadata').output.childItems",
-            "type": "Expression"
-          },
-          "condition": {
-            "value": "@contains(pipeline().parameters.allowedTables, item().name)",
-            "type": "Expression"
-          }
+          "notebookId": "691cd6b9-37df-4e80-949c-23edcbd05946",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
         },
-        "name": "Filter",
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Sales Silver Flatten",
         "dependsOn": [
           {
-            "activity": "Get Metadata",
+            "activity": "Sales Bronze Ingestion",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "db21fcc3-e34f-48c2-97c8-f2883c632373",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Sales Silver Enrichment",
+        "dependsOn": [
+          {
+            "activity": "Sales Silver Flatten",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "27509513-bc9b-4149-b597-7cf6af8517cf",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Sales Gold B2C Analytics",
+        "dependsOn": [
+          {
+            "activity": "Sales Silver Enrichment",
             "dependencyConditions": [
               "Succeeded"
             ]
           }
         ]
       }
-    ],
-    "parameters": {
-      "allowedTables": {
-        "type": "array",
-        "defaultValue": [
-          "SalesOrderHeader",
-          "SalesOrderDetail",
-          "Customer",
-          "SpecialOfferProduct",
-          "SalesTerritory",
-          "Product"
-        ]
-      }
-    }
+    ]
   }
 }
