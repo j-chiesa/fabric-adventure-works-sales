@@ -2,6 +2,8 @@
 
 ## Overview
 
+<img src="./images/architecture-diagram.png" alt="AW Sales" >
+
 This project utilizes the AdventureWorks2022 Full database to simulate the implementation of Microsoft Fabric workspaces for different departments within the company. The focus is currently on the **Sales Workspace**, which includes the following components:
 
 - **Bronze Lakehouse**: Raw data ingestion
