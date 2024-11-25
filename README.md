@@ -37,9 +37,12 @@ The data pipeline extracts data from Azure Data Lake Storage Gen2, processes it 
 ### Gold Layer and Data Modeling
 - Using data in the Gold lakehouses, a star schema data model is constructed for analysis.
 
+### Assumptions 
+- It is assumed that the data schema will not change over time. Therefore, the lakehouse schemas are built based on this condition.
+
 ## Additional Features
 - **Deployment Pipelines**: Utilize Microsoft Fabric deployment pipelines to integrate CI/CD into the project.
 - **Version Control**: Leverage Azure DevOps repositories for version control.
 
 ## Future Enhancements
-- Continue exploring and integrating new features of Microsoft Fabric to enhance the project.
+- Transform Gold lakehouses to warehouses for query performance.
