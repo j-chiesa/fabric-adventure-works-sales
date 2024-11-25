@@ -230,19 +230,6 @@ dfSilver_B2C = dfSilver.filter(col("PersonType") == 2)
 
 # CELL ********************
 
-dfSilver_B2C = dfSilver_B2C \
-    .withColumn("DateFirstPurchase", to_date(regexp_replace(col("DateFirstPurchase"), "Z$", ""))) \
-    .withColumn("BirthDate", to_date(regexp_replace(col("BirthDate"), "Z$", "")))
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
 columns_to_drop = [
     "OnlineOrderFlag", 
     "PurchaseOrderNumber", 
