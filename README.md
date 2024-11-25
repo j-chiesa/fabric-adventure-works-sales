@@ -1,10 +1,10 @@
 # Adventure Works: Sales Data Mart
 
-![Adventure Works Logo](https://dev.azure.com/YourProject/_git/YourRepo?path=/images/diagram.png
+<img src="./images/aw-logo.png" alt="AW Logo" >
 
 ## Overview
 
-![Architecture Diagram](https://dev.azure.com/YourProject/_git/YourRepo?path=/images/diagram.png
+<img src="./images/architecture-diagram.png" alt="Architecture Diagram" >
 
 This project utilizes the AdventureWorks2022 Full database to simulate the implementation of Microsoft Fabric workspaces for different departments within the company. The focus is currently on the **Sales Workspace**, which includes the following components:
 
