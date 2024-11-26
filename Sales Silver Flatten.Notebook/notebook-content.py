@@ -68,9 +68,6 @@ dfSilver = dfSilver \
     .withColumn("TelephoneNumber", xpath(col("AdditionalContactInfo"), lit("//*[local-name()='telephoneNumber']/*[local-name()='number']/text()")).getItem(0)) \
     .withColumn("MobileNumber", xpath(col("AdditionalContactInfo"), lit("//*[local-name()='mobile']/*[local-name()='number']/text()")).getItem(0))
 
-display(dfSilver)
-
-
 # METADATA ********************
 
 # META {

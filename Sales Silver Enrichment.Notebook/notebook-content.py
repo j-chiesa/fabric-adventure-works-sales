@@ -297,7 +297,7 @@ columns_to_drop = [
     "CommuteDistance"
 ] 
 
-dfSilver_B2C = dfSilver_B2C.drop(*columns_to_drop)
+dfSilver_B2B = dfSilver_B2B.drop(*columns_to_drop)
 
 # METADATA ********************
 
