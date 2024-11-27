@@ -49,4 +49,5 @@ The data pipeline extracts data from Azure Data Lake Storage Gen2, processes it 
 - **Version Control**: Leverage Azure DevOps repositories for version control.
 
 ## Future Enhancements
-- Transform Gold lakehouses to warehouses for query performance.
+- Change Gold lakehouses to warehouses for query performance.
+- Add ProducttType column based on the product number for analysis.
