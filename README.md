@@ -3,9 +3,6 @@
 <img src="./images/aw-logo.png" alt="AW Logo" >
 
 ## Overview
-
-<img src="./images/architecture-diagram.png" alt="Architecture Diagram" >
-
 This project utilizes the AdventureWorks2022 Full database to simulate the implementation of Microsoft Fabric workspaces for different departments within the company. The focus is currently on the **Sales Workspace**, which includes the following components:
 
 - **Bronze Lakehouse**: Raw data ingestion
@@ -13,6 +10,8 @@ This project utilizes the AdventureWorks2022 Full database to simulate the imple
 - **Gold Lakehouses**: Final data storage for B2C and B2B sales
 
 The data pipeline extracts data from Azure Data Lake Storage Gen2, processes it using the Medallion Architecture, and stores the clean/final data in dedicated lakehouses for B2C and B2B sales.
+
+<img src="./images/architecture-diagram.png" alt="Architecture Diagram" >
 
 ## Implementation Details
 
