@@ -1,4 +1,4 @@
-# Adventure Works: Sales Data Mart
+# Microsoft Fabric Project: Adventure Works Sales Data Mart
 
 <img src="./images/aw-logo.png" alt="AW Logo" >
 
